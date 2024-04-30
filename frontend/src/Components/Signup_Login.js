@@ -19,21 +19,43 @@ const [signup,setsignup] = useState({
     password : "",
 });
 
-const handleSubmit = (e)=>{
+// const handleSubmit = (e)=>{
+//     e.preventDefault();
+//     axios.post('http://localhost:4000/register',{signup}).then(() => {
+//       console.log("succesfully signed up");
+//       alert("Account Created Successfully!");
+//     }).catch((error) => {
+//       console.log(error);
+//       alert("Error Creating Account! Please Try Again.");
+//     });
+// }
+
+const handleSubmit = async (e) => {
     e.preventDefault();
-    axios.post('http://localhost:4000/register',{signup}).then(() => {
-      console.log("succesfully signed up");
-      alert("Account Created Successfully!");
-    }).catch((error) => {
-      console.log(error);
-      alert("Error Creating Account! Please Try Again.");
-    });
-}
+    try {
+        const response = await fetch('http://localhost:4000/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(signup),
+        });
+
+        if (response.ok) {
+            console.log("Successfully signed up");
+            alert("Account Created Successfully!");
+        }
+    } catch (error) {
+        console.error(error);
+        alert("Error Creating Account! Please Try Again.");
+    }
+};
+
 
     return (
         <div className={`box ${isRightPanelActive ? 'right-panel-active' : ''}`} id="box">
             <div className="form signup">
-                <form method='POST'>
+                <form  method='POST'>
                     <h1 style={{ color: '#8ac85e' }}>Create Account</h1>
                     <div className="social-box">
                         <a href="#" className="social"><i className="fab fa-github"></i></a>
