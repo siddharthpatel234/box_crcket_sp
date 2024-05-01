@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import '../Components/Signup_Login.css';
 
 const Signup_Login = () => {
@@ -14,9 +14,9 @@ const Signup_Login = () => {
     };
 
 const [signup,setsignup] = useState({
-    name:  "",
-    email: "",
-    password : "",
+    name:  "Siddharth",
+    email: "sid@gmail.com",
+    password : "12345678",
 });
 
 // const handleSubmit = (e)=>{
