@@ -1,30 +1,31 @@
-// import UserModel from '../backend/models/Users.js';
 import UserModel from '../models/Users.js';
 
+const registerUser = async (req, res) => {
+    const { name, email, password } = req.body;
 
-const registerUser = async(req,res) => {
-    const {name,email,password} = req.body;
-    const newUser = new UserModel(name, email, password);
-    await newUser.save(); 
-    
-    res.status(201).json({ message: 'User created successfully' });
+    try {
+        // Check if email already exists
+        const emailExists = await UserModel.findOne({ email });
+        if (emailExists) {
+            return res.status(400).json({ message: 'Email already registered' });
+        }
 
-    console.log(req.body);
+        // Check if username already exists
+        const usernameExists = await UserModel.findOne({ name });
+        if (usernameExists) {
+            return res.status(400).json({ message: 'Username already taken, please choose a different one' });
+        }
+
+        // If email and username are unique, create new user
+        const newUser = new UserModel({ name, email, password });
+        await newUser.save();
+
+        res.status(201).json({ message: 'User created successfully' });
+        // res.render('/Home');
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error' });
+    }
 }
 
 export default registerUser;
-
-
- // const newUser = new UserModel({
-    //     name: 'John Doe',
-    //     email: 'john@example.com',
-    //     password: 'password123'
-    //   });
-
-    //   newUser.save()    
-    //   .then(savedUser => {
-    //     console.log('User saved successfully:', savedUser);
-    //   })
-    //   .catch(error => {
-    //     console.error('Error saving user:', error);
-    //   });

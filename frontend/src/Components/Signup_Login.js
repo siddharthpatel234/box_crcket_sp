@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-// import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import '../Components/Signup_Login.css';
 
 const Signup_Login = () => {
     const [isRightPanelActive, setIsRightPanelActive] = useState(false);
+    const navigate = useNavigate();
 
     const handleSignUpClick = () => {
         setIsRightPanelActive(true);
@@ -19,19 +20,9 @@ const [signup,setsignup] = useState({
     password : "12345678",
 });
 
-// const handleSubmit = (e)=>{
-//     e.preventDefault();
-//     axios.post('http://localhost:4000/register',{signup}).then(() => {
-//       console.log("succesfully signed up");
-//       alert("Account Created Successfully!");
-//     }).catch((error) => {
-//       console.log(error);
-//       alert("Error Creating Account! Please Try Again.");
-//     });
-// }
-
 const handleSubmit = async (e) => {
     e.preventDefault();
+    
     try {
         const response = await fetch('http://localhost:4000/register', {
             method: 'POST',
@@ -41,12 +32,19 @@ const handleSubmit = async (e) => {
             body: JSON.stringify(signup),
         });
 
+        const responseData = await response.json();
+
         if (response.ok) {
-            console.log("Successfully signed up");
-            alert("Account Created Successfully!");
+            // User successfully registered
+            alert(responseData.message);
+            navigate("/");
+        } else {
+            // Error occurred during registration
+            alert(responseData.message);
         }
     } catch (error) {
         console.error(error);
+        console.log();
         alert("Error Creating Account! Please Try Again.");
     }
 };
