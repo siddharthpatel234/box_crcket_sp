@@ -55,7 +55,7 @@ const handleSubmit = async (e) => {
     return (
         <div className={`box ${isRightPanelActive ? 'right-panel-active' : ''}`} id="box">
             <div className="form signup">
-                <form  method='POST'>
+                <form method='POST'>
                     <h1 style={{ color: '#8ac85e' }}>Create Account</h1>
                     <div className="social-box">
                         <a href="#" className="social"><i className="fab fa-github"></i></a>
