@@ -63,9 +63,16 @@ const Signup_Login = () => {
             const responseData = await response.json();
 
             if (response.status === 200) {
+            
                 // User successfully logged in
                 alert(responseData.message);
+                localStorage.setItem('token', responseData.message);
+
+                // Update the token state to trigger re-rendering of Navbar
+                // setToken(localStorage.getItem('token'));
+                
                 navigate("/");
+            
             } else if (response.status === 401) {
                 // Email not found, ask user to register first
                 alert(responseData.message);
@@ -110,7 +117,7 @@ const Signup_Login = () => {
                         <a href="https://github.com/" className="social"><i className="far fa-envelope"></i></a>
                     </div>
                     <span className='span_style'>or use your account</span>
-                    <input className='input_data' type="email" placeholder="Email" onChange={e => setsignup({ ...signup, email: e.target.value })}  />
+                    <input className='input_data' type="email" placeholder="Email" onChange={e => setsignup({ ...signup, email: e.target.value })} />
                     <input className='input_data' type="password" placeholder="Password" onChange={e => setsignup({ ...signup, password: e.target.value })} />
                     <button onClick={handleLogin} className='btn_design'>Sign In</button>
                 </form>
@@ -121,13 +128,13 @@ const Signup_Login = () => {
                         <h1>Welcome To<br />Box Cricket World</h1>
                         <h4 className='heading_4'>CRICKET | PICKLE BALL | FOOTBALL</h4>
                         <button className=" btn_design press" id="signIn" onClick={handleSignInClick}>Sign In</button>
-                        <div className="credit">Play it close, play it tight <a href="">– box cricket's where we find our delight! </a></div>
+                        <div className="credit">Play it close, play it tight <a href="https://www.github.com">– box cricket's where we find our delight! </a></div>
                     </div>
                     <div className={`panel overlay-right ${isRightPanelActive ? 'right-panel-active' : ''}`}>
                         <h1>Welcome Back</h1>
                         <h4 className='heading_4'>CRICKET | PICKLE BALL | FOOTBALL</h4>
                         <button className="btn_design press" id="signUp" onClick={handleSignUpClick}>Sign Up</button>
-                        <div className="credit">Think Inside the Box,<a href="">Outside the Boundaries! </a></div>
+                        <div className="credit">Think Inside the Box,<a href="https://www.github.com">Outside the Boundaries! </a></div>
                     </div>
                 </div>
             </div>

@@ -1,4 +1,6 @@
 import UserModel from '../models/Users.js';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 
 const registerUser = async (req, res) => {
     const { name, email, password } = req.body;
@@ -16,8 +18,12 @@ const registerUser = async (req, res) => {
             return res.status(400).json({ message: 'Username already taken, please choose a different one' });
         }
 
+        const saltRound = 10;
+        const hash_password = await bcrypt.hash(password,saltRound);
+
+
         // If email and username are unique, create new user
-        const newUser = new UserModel({ name, email, password });
+        const newUser = new UserModel({ name, email, password:hash_password });
         await newUser.save();
 
         res.status(201).json({ message: 'User created successfully' });

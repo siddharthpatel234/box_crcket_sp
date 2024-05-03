@@ -1,8 +1,26 @@
+import { useState,useEffect } from 'react'
 import React from 'react'
 import '../Components/Navbar.css'
 import { Link } from 'react-router-dom'
+// import useNavigate from 'react-router-dom'
+
 
 export default function Navbar() {
+    
+    const [token, setToken] = useState(localStorage.getItem('token'));
+
+    useEffect(() => {
+        // Update token state whenever it changes in localStorage
+        setToken(localStorage.getItem('token'));
+    }, [localStorage.getItem('token')]);
+
+    const handleLogOut = () => {
+        localStorage.removeItem('token');
+        // Force re-rendering of the Navbar component by updating its state
+        setToken(null);
+    }
+
+
     return (
         <>
             <nav>
@@ -27,7 +45,17 @@ export default function Navbar() {
                         <Link to={'/Contact'}>Contact Us</Link>
                     </li>
                     <li>
-                        <Link to={'/Login'}>SignUp/Login</Link>
+                        {/* If Token set Display LogOut else Sigup/Login */}
+                        {token ? (
+                            <>
+                                <Link onClick={handleLogOut}>Log Out</Link>
+                            </>
+                        ) : (
+                            <>
+                                <Link to={'/Login'}>SignUp/Login</Link>
+                            </>
+                        )}
+
                     </li>
                     <li>
                         <form class="form-inline my-2 my-lg-0">
