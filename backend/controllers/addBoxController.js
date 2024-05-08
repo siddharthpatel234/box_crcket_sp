@@ -1,6 +1,4 @@
-import express from 'express'
-import BoxModal from '../Model/BoxModal.js'
-import mongoose from 'mongoose'
+import BoxModal from '../models/BoxModal.js'
 
 
 const addBoxController = async(req,res) => {
