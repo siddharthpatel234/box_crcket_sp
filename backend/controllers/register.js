@@ -1,6 +1,7 @@
 import UserModel from '../models/Users.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import generateToken from '../utils/jwtutils.js';
 
 const registerUser = async (req, res) => {
     const { name, email, password } = req.body;
@@ -21,13 +22,15 @@ const registerUser = async (req, res) => {
         const saltRound = 10;
         const hash_password = await bcrypt.hash(password,saltRound);
 
+        const token = generateToken({ name, email, password });
+        console.log("JWT TOKEN : " + token);
 
         // If email and username are unique, create new user
         const newUser = new UserModel({ name, email, password:hash_password });
         await newUser.save();
 
-        res.status(201).json({ message: 'User created successfully' });
-        // res.render('/Home');
+        return res.status(200).json({ message: token });
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server Error' });

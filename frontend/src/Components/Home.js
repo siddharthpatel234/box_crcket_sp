@@ -4,6 +4,7 @@ import About from './About';
 import List from './List';
 import Contact from './Contact';
 import SignupLogin from './Signup_Login';
+import AddBox from './AddBox';
 
 
 export default function Home() {
@@ -18,6 +19,7 @@ export default function Home() {
             <Route path="/About" element={<About></About>}></Route>
             <Route path="/Contact" element={<Contact/>} />
             <Route path="/Login" element={<SignupLogin/>}/>
+            <Route path="/add" element={<AddBox/>}/>
             </Routes>
             </div>
         </>

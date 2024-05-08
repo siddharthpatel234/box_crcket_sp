@@ -5,10 +5,10 @@ const secretkey = crypto.randomBytes (32).toString('hex');
 
 function generateToken(user){
     const payload = {
-        username: user.username,
-        email: user.email,
+        id: user._id,
     }
-    return jwt.sign(payload,secretkey);
+    return jwt.sign(payload,'shhhhh');
 }
 
 export default generateToken;
+export {secretkey}

@@ -1,6 +1,8 @@
 import UserModel from '../models/Users.js';
+import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import generateToken from '../utils/jwtutils.js';
+import { secretkey } from '../utils/jwtutils.js';
 
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
@@ -19,7 +21,14 @@ const loginUser = async (req, res) => {
         }
 
         const token = generateToken(user);
-        console.log("JWT TOKEN : "+token);
+        console.log("JWT TOKEN : " + token);
+        // const verifiedToken = jwt.verify(token, secretkey);
+        // const response = await UserModel.findOne({ _id: verifiedToken.id })
+
+        // if (response) {
+        //     console.log(response.email)
+        // }
+
         return res.status(200).json({ message: token });
     } catch (error) {
         console.error(error);

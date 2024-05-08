@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../Components/Signup_Login.css';
+import { userInfo } from '../App';
 
 const Signup_Login = () => {
+
+    const context = useContext(userInfo)
+
     const [isRightPanelActive, setIsRightPanelActive] = useState(false);
     const navigate = useNavigate(); //  for redirecting to different pages
 
@@ -36,8 +40,11 @@ const Signup_Login = () => {
 
             if (response.ok) {
                 // User successfully registered
-                alert(responseData.message);
+                context.setIsloggedin(true)
+                alert(context.isloggedin);
+                localStorage.setItem('token', responseData.message);
                 navigate("/");
+                // localStorage.getItem('token');
             } else {
                 // Error occurred during registration
                 alert(responseData.message);
@@ -65,11 +72,9 @@ const Signup_Login = () => {
             if (response.status === 200) {
             
                 // User successfully logged in
+                context.setIsloggedin(true);
                 alert(responseData.message);
                 localStorage.setItem('token', responseData.message);
-
-                // Update the token state to trigger re-rendering of Navbar
-                // setToken(localStorage.getItem('token'));
                 
                 navigate("/");
             

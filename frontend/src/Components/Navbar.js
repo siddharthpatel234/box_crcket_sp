@@ -1,13 +1,16 @@
-import { useState,useEffect } from 'react'
+import { useState,useEffect, useContext } from 'react'
 import React from 'react'
 import '../Components/Navbar.css'
 import { Link } from 'react-router-dom'
 // import useNavigate from 'react-router-dom'
-
+import { userInfo } from '../App'
 
 export default function Navbar() {
     
     const [token, setToken] = useState(localStorage.getItem('token'));
+
+    const context = useContext(userInfo)
+
 
     useEffect(() => {
         // Update token state whenever it changes in localStorage
@@ -15,9 +18,11 @@ export default function Navbar() {
     }, [localStorage.getItem('token')]);
 
     const handleLogOut = () => {
+        context.setIsloggedin(false);
         localStorage.removeItem('token');
         // Force re-rendering of the Navbar component by updating its state
         setToken(null);
+        alert('Log-Out');
     }
 
 
@@ -31,22 +36,20 @@ export default function Navbar() {
                 <label className="logo">Box Cricket</label>
                 <ul>
                     <li>
-                        {/* <a className="active" href="/">
-                            Home
-                        </a> */}
                         <Link to={'/'}>Home</Link>
                     </li>
                     <li>
-                        {/* <a href="#">About</a> */}
                         <Link to={'/About'}>About</Link>
                     </li>
                     <li>
-                        {/* <a href="#">Contact</a> */}
                         <Link to={'/Contact'}>Contact Us</Link>
                     </li>
                     <li>
-                        {/* If Token set Display LogOut else Sigup/Login */}
-                        {token ? (
+                        <Link to={'/add'}>Add Box</Link>
+                    </li>
+                    <li>
+                        {/* If Token set Display Logout else Sigup/Login */}
+                        {context.isloggedin ? (
                             <>
                                 <Link onClick={handleLogOut}>Log Out</Link>
                             </>
