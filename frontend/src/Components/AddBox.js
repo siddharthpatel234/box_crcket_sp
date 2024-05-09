@@ -10,13 +10,6 @@ export default function AddBox() {
 
   const date = new Date()
 
-  // const initialBoxData = {
-  //     boxName : '',
-  //     address : '',
-  //     latitude  : '',
-  //     longitude : ''
-  // }
-
   const initialTime = {
           from : date.getHours() + ":" + date.getMinutes(),
           to : date.getHours()+1 + ":" + date.getMinutes()
@@ -93,15 +86,11 @@ export default function AddBox() {
   const [location,setLocation] = useState(null)
   const [box,setBox] = useState(days)
   
-  // const [time, setTime] = useState(new Date())
-  // const [data,setData] = useState(initialBoxData)
   const [currentDay,setCurrentDay] = useState(days[0])
   const [boxName,setBoxName] = useState(null)
   const [boxAddress,setBoxAddress] = useState(null)
   const [pincode,setPincode] = useState(0)
 
-  // const changeTime = useCallback((value) => { setTime(value) }, [time])
-  // const changeData = useCallback((value)=>{setData(value)},[data])
   const chnagePincode = useCallback((value,id)=>{
       if(value.length<=6)
       {
@@ -112,7 +101,23 @@ export default function AddBox() {
           document.getElementById(id).classList.add('errorData')
       }
     },[setPincode])
-  const chnageCurrentDay = useCallback((value)=>{setCurrentDay(value)},[setCurrentDay])
+    
+
+  // const chnageCurrentDay = useCallback((value)=>{setCurrentDay(value)},[setCurrentDay])
+  const chnageCurrentDay = useCallback((value) => {
+    setCurrentDay(value);
+  
+    // Remove the 'daySelected' class from all days
+    const dayElements = document.querySelectorAll('.day');
+    dayElements.forEach((element) => {
+      element.classList.remove('daySelected');
+    });
+  
+    // Add the 'daySelected' class to the selected day
+    const selectedDayElement = document.getElementById(value.day);
+    selectedDayElement.classList.add('daySelected');
+  }, [setCurrentDay]);
+  
   const changeLocation = useCallback((value)=>{setLocation(value)},[setLocation])
   const changeSports = useCallback((value)=>{setSports(value)},[setSports])
   const chageBoxName = useCallback((value)=>{setBoxName(value)},[setBoxName])
@@ -158,7 +163,6 @@ export default function AddBox() {
           console.log(await response.json())
         else if(response.status === 208)
             console.log(await response.json())
-            // const data = await response.json()
       }
       else{
           console.error('Enter data')
@@ -171,57 +175,60 @@ export default function AddBox() {
 
   function updateTime(e,id)
   {
-      // id  = time id
       const name = e.target.name
       const value = e.target.value
 
       const updatedBox = [...box]
 
-      // updatedBox[currentDay.id] = {
-      //     ...updatedBox[currentDay.id],
-      //     time : [...updatedBox[currentDay.id].time,{[updatedBox[currentDay.id].time[id].name]:value}]
-      // }
-
-      console.log(name)
-      // {box[currentDay.id].time[id].name = value}
-
       updatedBox[currentDay.id].time[id] = {...updatedBox[currentDay.id].time[id],[name]:value}
-
-      console.log(updatedBox[currentDay.id].time)
-
       setBox(updatedBox)
-      console.log(box)
-
-      // setBox(updatedBox)
   }
 
-  function updateSport(id)
-  {
-      const doc = document.getElementById(id)
-      const updatedSports = sports
-      if(doc.classList.contains('imgBorderAddBox'))
-      {
-        doc.classList.remove('imgBorderAddBox')
-        updatedSports.splice(updatedSports.indexOf(id),1)
-      }
-      else{
-        doc.classList.add('imgBorderAddBox')
-        updatedSports.push(id)
-      }
-      changeSports(updatedSports)
+  // function updateSport(id)
+  // {
+  //     const doc = document.getElementById(id)
+  //     const updatedSports = sports
+  //     if(doc.classList.contains('imgBorderAddBox'))
+  //     {
+  //       doc.classList.remove('imgBorderAddBox')
+  //       updatedSports.splice(updatedSports.indexOf(id),1)
+  //     }
+  //     else{
+  //       doc.classList.add('imgBorderAddBox')
+  //       updatedSports.push(id)
+  //     }
+  //     changeSports(updatedSports)
 
-      console.log(updatedSports)
+  //     console.log(updatedSports)
+  // }
+
+  function updateSport(id) {
+    const doc = document.getElementById(id);
+    const updatedSports = [...sports]; // Make a copy of the sports array
+    
+    if (doc.classList.contains('imgBorderAddBox')) {
+      doc.classList.remove('imgBorderAddBox');
+      // Remove the sport from the array
+      const index = updatedSports.indexOf(id);
+      if (index !== -1) {
+        updatedSports.splice(index, 1);
+      }
+    } else {
+      doc.classList.add('imgBorderAddBox');
+      // Add the sport to the array
+      updatedSports.push(id);
+    }
+    
+    changeSports(updatedSports); 
   }
+  
 
   
   return (
-    <div className='mainContainer'>
-      {/* <h1>Hello</h1> */}
-        {/* <TimePicker use12Hours={true} seperator={true} ></TimePicker> */}
-
-      <div className="container" style={{ width: '100%', padding: '5%', marginLeft: '7%', marginRight: '7%' }}>
-        <div style={{ width: '45%',margin : '5%' }}>
-          <div className="wrapper" style={{margin : '2%'}} >
+    <div className='mainContainer' style={{ height: '100vh', overflowY: 'auto',width:'100%'}}>
+      <div className="c1" style={{padding: '5%',boxShadow: 'none'}}>
+        <div style={{ width: '45%',margin : '5%', paddingRight: '5%'}}>
+          <div className="w" style={{margin : '2%'}} >
 
             <input class="form-control textAddBox"  type="text" placeholder="Box Name"
               onChange={(e)=>{chageBoxName(e.target.value)}}
@@ -260,23 +267,19 @@ export default function AddBox() {
           <div style={{flexDirection : 'row',display :'flex',justifyContent : 'space-around'}}>
               {box.map((item)=>{
                   return(
-
+                    
                     <div >
                       <h5 className='day'
                         onClick={()=>{
-                          // console.log(item);
                           chnageCurrentDay(item)}}
                       >{item.day}</h5>
-                      {
-                          // item.time.map((item)=>{item.})
-                      }
                     </div>
 
 
                   )
               }) }
           </div>
-
+              <br></br>
           <table>
               <div>
                 <tr>
@@ -303,35 +306,21 @@ export default function AddBox() {
               </div>
           </table> 
 
-          <div className="button-wrapper" >
-            {/* <button className="btn outline">DETAILS</button> */}
-            <button className="btn fill"
+          <div className="bw" >
+            <button className="btno fil"
               onClick={()=>{
-                  console.log(currentDay)
-
                   const updatedBox = [...box]
                   updatedBox[currentDay.id] = {...updatedBox[currentDay.id],time : [...updatedBox[currentDay.id].time,initialTime]}
-                  
                   setBox(updatedBox)
-                  // console.log(box);
               }}
             >Add</button>
-            <button className="btn fill"
+            <button className="btno fil"
               onClick={()=>{
-                  console.log(currentDay)
-
                   const updatedBox = [...box]
-
-
                   updatedBox[currentDay.id].time.pop()
-
-                  // updatedBox[currentDay.id] = {...updatedBox[currentDay.id],time : [...updatedBox[currentDay.id].time,initialTime]}
-                  
                   setBox(updatedBox)
-                  // console.log(box);
               }}
             >Remove</button>
-
           </div>
         </div>
       </div>
