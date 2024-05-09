@@ -1,7 +1,9 @@
 import UserModel from '../models/Users.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import generateToken from '../utils/jwtutils.js';
+// import generateToken from '../utils/jwtutils.js';
+import { generateToken, secretkey } from '../utils/jwtutils.js';
+
 
 const registerUser = async (req, res) => {
     const { name, email, password } = req.body;

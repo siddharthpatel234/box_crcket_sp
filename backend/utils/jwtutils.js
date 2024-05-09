@@ -10,5 +10,7 @@ function generateToken(user){
     return jwt.sign(payload,'shhhhh');
 }
 
-export default generateToken;
-export {secretkey}
+// export default {generateToken,secretkey};
+// export {secretkey}
+
+export { generateToken, secretkey };

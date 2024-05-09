@@ -37,7 +37,7 @@ const Signup_Login = () => {
             });
 
             const responseData = await response.json();
-
+            console.log(responseData);
             if (response.ok) {
                 // User successfully registered
                 context.setIsloggedin(true)

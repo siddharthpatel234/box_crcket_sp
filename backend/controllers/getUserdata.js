@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { secretkey } from '../utils/jwtutils.js';
+// import { secretkey } from '../utils/jwtutils.js';
 import UserModel from '../models/Users.js';
 
 const getUserdata = async(req,res) => {

@@ -16,7 +16,6 @@ function App() {
     })
     if(response.status === 308){
         const info = await response.json()
-        console.log("HELLLLOOOOO")
         console.log(info.data)
         setUserData(info.data)
     }

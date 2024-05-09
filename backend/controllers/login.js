@@ -1,11 +1,15 @@
 import UserModel from '../models/Users.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import generateToken from '../utils/jwtutils.js';
-import { secretkey } from '../utils/jwtutils.js';
+import { generateToken, secretkey } from '../utils/jwtutils.js';
+
+// import generateToken from '../utils/jwtutils.js';
+// import { secretkey } from '../utils/jwtutils.js';
+
 
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
+    console.log(req.body+" && "+{email,password});
 
     try {
         // Check if user with the provided email exists
