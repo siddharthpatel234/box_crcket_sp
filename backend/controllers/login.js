@@ -3,13 +3,9 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { generateToken, secretkey } from '../utils/jwtutils.js';
 
-// import generateToken from '../utils/jwtutils.js';
-// import { secretkey } from '../utils/jwtutils.js';
-
-
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
-    console.log(req.body+" && "+{email,password});
+    // console.log(req.body+" && "+{email,password});
 
     try {
         // Check if user with the provided email exists
@@ -26,14 +22,14 @@ const loginUser = async (req, res) => {
 
         const token = generateToken(user);
         console.log("JWT TOKEN : " + token);
-        // const verifiedToken = jwt.verify(token, secretkey);
-        // const response = await UserModel.findOne({ _id: verifiedToken.id })
+        const verifiedToken = jwt.verify(token, 'shhhhh');
+        const response = await UserModel.findOne({ _id: verifiedToken.id })
 
-        // if (response) {
-        //     console.log(response.email)
-        // }
+        if (response) {
+            console.log(response)
+        }
 
-        return res.status(200).json({ message: token });
+        return res.status(200).json({ message: verifiedToken });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server Error' });

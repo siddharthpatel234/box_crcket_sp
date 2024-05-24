@@ -1,4 +1,4 @@
-import { useState,useEffect, useContext } from 'react'
+import { useContext } from 'react'
 import React from 'react'
 import '../Components/Navbar.css'
 import { Link } from 'react-router-dom'
@@ -7,21 +7,15 @@ import { userInfo } from '../App'
 
 export default function Navbar() {
     
-    const [token, setToken] = useState(localStorage.getItem('token'));
+    // const [token, setToken] = useState(localStorage.getItem('token'));
 
     const context = useContext(userInfo)
-
-
-    useEffect(() => {
-        // Update token state whenever it changes in localStorage
-        setToken(localStorage.getItem('token'));
-    }, [localStorage.getItem('token')]);
 
     const handleLogOut = () => {
         context.setIsloggedin(false);
         localStorage.removeItem('token');
         // Force re-rendering of the Navbar component by updating its state
-        setToken(null);
+        // setToken(null);
         alert('Log-Out');
     }
 

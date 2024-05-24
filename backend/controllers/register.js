@@ -25,13 +25,15 @@ const registerUser = async (req, res) => {
         const hash_password = await bcrypt.hash(password,saltRound);
 
         const token = generateToken({ name, email, password });
-        console.log("JWT TOKEN : " + token);
+        const verifiedToken = jwt.verify(token, 'shhhhh');
+        console.log("JWT TOKEN : " + verifiedToken);
+        
 
         // If email and username are unique, create new user
         const newUser = new UserModel({ name, email, password:hash_password });
         await newUser.save();
 
-        return res.status(200).json({ message: token });
+        return res.status(200).json({ message: verifiedToken });
 
     } catch (error) {
         console.error(error);
