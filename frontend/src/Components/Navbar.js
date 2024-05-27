@@ -2,12 +2,14 @@ import { useContext } from 'react'
 import React from 'react'
 import '../Components/Navbar.css'
 import { Link } from 'react-router-dom'
-// import useNavigate from 'react-router-dom'
 import { userInfo } from '../App'
 
 export default function Navbar() {
-    
+
     // const [token, setToken] = useState(localStorage.getItem('token'));
+
+    const User_details = useContext(userInfo);
+
 
     const context = useContext(userInfo)
 
@@ -29,6 +31,10 @@ export default function Navbar() {
                 </label>
                 <label className="logo">Box Cricket</label>
                 <ul>
+                    <li>
+                        {/* <span>Welcome, {User_details}!</span> */}
+                        
+                    </li>
                     <li>
                         <Link to={'/'}>Home</Link>
                     </li>

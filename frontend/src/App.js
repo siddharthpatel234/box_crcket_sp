@@ -8,21 +8,24 @@ const userInfo = createContext(null);
 
 function App() {
   const [isloggedin, setIsloggedin] = useState(false);
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState(null);
 
   async function getData() {
     const token = localStorage.getItem('token');
+
     if (!token) {
       console.log('No token found');
       return;
     }
-    if (token) {
-      console.log("TOKEN SET ALREADY");
-      // console.log(JSON.stringify(localStorage.getItem('token')));
-      return;
-    }
 
     try {
+      const tokenPayload = token.split('.')[1]; // Extract the payload part of the token
+      const decodedPayload = JSON.parse(atob(tokenPayload)); // Decode the payload from Base64
+
+      // console.log("Decoded Token Payload:", decodedPayload.id);
+      console.log(decodedPayload.id);
+      setUserData(decodedPayload.id);
+
       const response = await fetch('http://localhost:4000/getUserdata', {
         method: 'GET',
         headers: {
@@ -31,15 +34,12 @@ function App() {
         }
       });
 
-      if (response.status === 200) {
-        alert("Hello status : 200");
-        const info = await response.json();
-        console.log(info);
-        setUserData(info.data);
-        // localStorage.setItem('token', token);
-      } else {
-        console.log('Failed to fetch user data');
-      }
+      if (response.ok) {
+        const userData = await response.json();
+        // console.log(userData.data.name);
+        setUserData(userData);
+      } 
+
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
@@ -47,7 +47,7 @@ function App() {
 
   useEffect(() => {
     getData();
-  });
+  }, []); // Empty array ensures it runs only once when the component mounts
 
   useEffect(() => {
     if (localStorage.getItem('token')) {

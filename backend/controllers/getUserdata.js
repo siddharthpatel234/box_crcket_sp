@@ -22,6 +22,7 @@ const getUserdata = async (req, res) => {
 
         // Find user by the id in the token
         const response = await UserModel.findOne({ _id: verifiedToken.id });
+        console.log(response);
         if (response) {
             return res.status(200).json({ data: response });
         } else {

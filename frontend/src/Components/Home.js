@@ -5,6 +5,7 @@ import List from './List';
 import Contact from './Contact';
 import SignupLogin from './Signup_Login';
 import AddBox from './AddBox';
+import OwnerDashboard from './Owner_dashboard';
 
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
             <Route path="/Contact" element={<Contact/>} />
             <Route path="/Login" element={<SignupLogin/>}/>
             <Route path="/add" element={<AddBox/>}/>
+            <Route path="/owner" element={<OwnerDashboard></OwnerDashboard>}/>
             </Routes>
             </div>
         </>

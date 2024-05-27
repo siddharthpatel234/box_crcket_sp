@@ -33,7 +33,7 @@ const registerUser = async (req, res) => {
         const newUser = new UserModel({ name, email, password:hash_password });
         await newUser.save();
 
-        return res.status(200).json({ message: verifiedToken });
+        return res.status(200).json({ message: token });
 
     } catch (error) {
         console.error(error);
