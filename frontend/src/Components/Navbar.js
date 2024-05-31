@@ -3,6 +3,7 @@ import React from 'react'
 import '../Components/Navbar.css'
 import { Link } from 'react-router-dom'
 import { userInfo } from '../App'
+import BOXCRICKET from '../Components/BOXCRICKET.png';
 
 export default function Navbar() {
 
@@ -29,7 +30,7 @@ export default function Navbar() {
                 <label htmlFor="check" className="checkbtn">
                     <i className="fas fa-bars" />
                 </label>
-                <label className="logo">Box Cricket</label>
+                <label className="logo"><img src={BOXCRICKET} alt='BOXCRICKET' style={{width:'35vh', marginTop:'2.5vh'}} /></label>
                 <ul>
                     <li>
                         {/* <span>Welcome, {User_details}!</span> */}

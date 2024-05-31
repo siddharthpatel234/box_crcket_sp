@@ -21,7 +21,7 @@ export default function Home() {
             <Route path="/Contact" element={<Contact/>} />
             <Route path="/Login" element={<SignupLogin/>}/>
             <Route path="/add" element={<AddBox/>}/>
-            <Route path="/owner" element={<OwnerDashboard></OwnerDashboard>}/>
+            <Route path="/admin" element={<OwnerDashboard></OwnerDashboard>}/>
             </Routes>
             </div>
         </>

@@ -1,105 +1,97 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../css/Owner_dashboard.css';
 // import 'https://unicons.iconscout.com/release/v4.0.0/css/line.css';
 
 const OwnerDashboard = () => {
-    const [darkMode, setDarkMode] = useState(false);
-    const [sidebarClosed, setSidebarClosed] = useState(false);
+
+    const [pendingUsers, setPendingUsers] = useState([]);
+
+
+    const handleApprove = async (index) => {
+        try {
+            const userToUpdate = pendingUsers[index];
+            const response = await fetch(`http://localhost:4000/admin/status`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: userToUpdate._id, status: 'APPROVED' }) // send user id and status
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to update user status');
+            }
+    
+            const updatedUser = await response.json();
+            const updatedUsers = [...pendingUsers];
+            updatedUsers[index] = updatedUser;
+            setPendingUsers(updatedUsers);
+            alert("Status : Approved Successfully");
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    
+    const handleReject = async (index) => {
+        try {
+            const userToUpdate = pendingUsers[index];
+            const response = await fetch(`http://localhost:4000/admin/status`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: userToUpdate._id, status: 'REJECTED' }) // send user id and status
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to update user status');
+            }
+    
+            const updatedUser = await response.json();
+            const updatedUsers = [...pendingUsers];
+            updatedUsers[index] = updatedUser;
+            setPendingUsers(updatedUsers);
+            alert("Status : Reject Successfully");
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     useEffect(() => {
-        const savedMode = localStorage.getItem('mode');
-        const savedStatus = localStorage.getItem('status');
+        const fetchData = async () => {
+            try {
 
-        if (savedMode === 'dark') {
-            setDarkMode(true);
-        }
-        if (savedStatus === 'close') {
-            setSidebarClosed(true);
-        }
+                const response = await fetch('http://localhost:4000/admin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                if (!response.ok) {
+                    throw new Error('Failed to fetch pending users by frontend');
+                }
+
+                const data = await response.json();
+                setPendingUsers(data.data);
+                // console.log(pendingUsers);
+                // console.log(data);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchData();
     }, []);
 
-    useEffect(() => {
-        localStorage.setItem('mode', darkMode ? 'dark' : 'light');
-    }, [darkMode]);
-
-    useEffect(() => {
-        localStorage.setItem('status', sidebarClosed ? 'close' : 'open');
-    }, [sidebarClosed]);
-
-    const toggleDarkMode = () => setDarkMode(!darkMode);
-    const toggleSidebar = () => setSidebarClosed(!sidebarClosed);
+    
+    
+    
 
     return (
-        <div className={darkMode ? 'owner-dark' : ''}>
-            <nav className={sidebarClosed ? 'owner-close' : ''}>
-                <div className="owner-logo-name">
-                    <div className="owner-logo-image">
-                        <img src="images/logo.png" alt="Logo" />
-                    </div>
-                    <span className="owner-logo_name">CodingLab</span>
-                </div>
-                <div className="owner-menu-items">
-                    <ul className="owner-nav-links">
-                        <li>
-                            <a href="#">
-                                <i className="uil uil-estate"></i>
-                                <span className="owner-link-name">Dashboard</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i className="uil uil-files-landscapes"></i>
-                                <span className="owner-link-name">Content</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i className="uil uil-chart"></i>
-                                <span className="owner-link-name">Analytics</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i className="uil uil-thumbs-up"></i>
-                                <span className="owner-link-name">Like</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i className="uil uil-comments"></i>
-                                <span className="owner-link-name">Comment</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <i className="uil uil-share"></i>
-                                <span className="owner-link-name">Share</span>
-                            </a>
-                        </li>
-                    </ul>
-                    <ul className="owner-logout-mode">
-                        <li>
-                            <a href="#">
-                                <i className="uil uil-signout"></i>
-                                <span className="owner-link-name">Logout</span>
-                            </a>
-                        </li>
-                        <li className="owner-mode">
-                            <a href="#" onClick={toggleDarkMode}>
-                                <i className="uil uil-moon"></i>
-                                <span className="owner-link-name">Dark Mode</span>
-                            </a>
-                            <div className="owner-mode-toggle">
-                                <span className="owner-switch"></span>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-
+        <div style={{ width: '100%', paddingTop: '0px' }}>
             <section className="owner-dashboard">
                 <div className="owner-top">
-                    <i className="uil uil-bars owner-sidebar-toggle" onClick={toggleSidebar}></i>
+                    <i className="uil uil-bars owner-sidebar-toggle"></i>
                     <div className="owner-search-box">
                         <i className="uil uil-search"></i>
                         <input type="text" placeholder="Search here..." />
@@ -131,64 +123,48 @@ const OwnerDashboard = () => {
                         </div>
                     </div>
 
-                    <div className="owner-activity">
-                        <div className="owner-title">
-                            <i className="uil uil-clock-three"></i>
-                            <span className="owner-text">Recent Activity</span>
-                        </div>
-                        <div className="owner-activity-data">
-                            <div className="owner-data owner-names">
-                                <span className="owner-data-title">Name</span>
-                                <span className="owner-data-list">Prem Shahi</span>
-                                <span className="owner-data-list">Deepa Chand</span>
-                                <span className="owner-data-list">Manisha Chand</span>
-                                <span className="owner-data-list">Pratima Shahi</span>
-                                <span className="owner-data-list">Man Shahi</span>
-                                <span className="owner-data-list">Ganesh Chand</span>
-                                <span className="owner-data-list">Bikash Chand</span>
+                    {pendingUsers.length >= 0 ? (
+                        <div className="owner-activity">
+                            <div className="owner-title">
+                                <i className="uil uil-clock-three"></i>
+                                <span className="owner-text">Recent Pending Users</span>
                             </div>
-                            <div className="owner-data owner-email">
-                                <span className="owner-data-title">Email</span>
-                                <span className="owner-data-list">premshahi@gmail.com</span>
-                                <span className="owner-data-list">deepachand@gmail.com</span>
-                                <span className="owner-data-list">prakashhai@gmail.com</span>
-                                <span className="owner-data-list">manishachand@gmail.com</span>
-                                <span className="owner-data-list">pratimashhai@gmail.com</span>
-                                <span className="owner-data-list">manshahi@gmail.com</span>
-                                <span className="owner-data-list">ganeshchand@gmail.com</span>
-                            </div>
-                            <div className="owner-data owner-joined">
-                                <span className="owner-data-title">Joined</span>
-                                <span className="owner-data-list">2022-02-12</span>
-                                <span className="owner-data-list">2022-02-12</span>
-                                <span className="owner-data-list">2022-02-13</span>
-                                <span className="owner-data-list">2022-02-13</span>
-                                <span className="owner-data-list">2022-02-14</span>
-                                <span className="owner-data-list">2022-02-14</span>
-                                <span className="owner-data-list">2022-02-15</span>
-                            </div>
-                            <div className="owner-data owner-type">
-                                <span className="owner-data-title">Type</span>
-                                <span className="owner-data-list">New</span>
-                                <span className="owner-data-list">Member</span>
-                                <span className="owner-data-list">Member</span>
-                                <span className="owner-data-list">New</span>
-                                <span className="owner-data-list">Member</span>
-                                <span className="owner-data-list">New</span>
-                                <span className="owner-data-list">Member</span>
-                            </div>
-                            <div className="owner-data owner-status">
-                                <span className="owner-data-title">Status</span>
-                                <span className="owner-data-list">Liked</span>
-                                <span className="owner-data-list">Liked</span>
-                                <span className="owner-data-list">Liked</span>
-                                <span className="owner-data-list">Liked</span>
-                                <span className="owner-data-list">Liked</span>
-                                <span className="owner-data-list">Liked</span>
-                                <span className="owner-data-list">Liked</span>
+                            <div className="owner-activity-data">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th className="owner-table-header">BOXNAME</th>
+                                            <th className="owner-table-header">BOXADDRESS</th>
+                                            <th className="owner-table-header">Sports</th>
+                                            <th className="owner-table-header">STATUS</th>
+                                            <th className="owner-table-header">PINCODE</th>
+                                            <th className="owner-table-header">Edit Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {pendingUsers.map((user,index) => (
+                                            <tr key={user._id}>
+                                                <td className="owner-table-data">{user.boxName}</td>
+                                                <td className="owner-table-data">{user.boxAddress}</td>
+                                                <td className="owner-table-data">{user.sports.join(', ')}</td>
+                                                <td className="owner-table-data">{user.status}</td>
+                                                <td className="owner-table-data">{user.pincode}</td>
+                                                <td className="owner-table-data">
+                                                    <button className="approve-btn" onClick={() => handleApprove(index)}>Approve</button>
+                                                    <button className="reject-btn" onClick={() => handleReject(index)}>Reject</button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                    </div>
+                    ) : (
+                        <p>No pending users found.</p>
+                    )}
+
+
+
                 </div>
             </section>
         </div>

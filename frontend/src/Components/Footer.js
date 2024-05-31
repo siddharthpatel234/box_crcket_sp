@@ -5,7 +5,8 @@ export default function Footer() {
     return (
         <>
 
-            <footer>
+            <footer >
+                <hr></hr>
                 <div className="con">
                     <div className="footer_content">
                         <div className="first_section">
